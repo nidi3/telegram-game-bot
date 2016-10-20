@@ -62,42 +62,38 @@ class Player(val x: Int, val y: Int) {
             return println("No start button found")
         }
         center(200)
-        hit(150)
-        hit(150)
+        hithit(150)
         do {
             if (isWaitBranch(0)) left = !left
             val b1 = isBranch(1)
             val b2 = isBranch(2)
             val b3 = isBranch(3)
             if (!b1) {
-                hit(20)
-                hit(20)
+                hithit(20)
                 if (!b2) {
-                    hit(20)
-                    hit(20)
+                    hithit(20)
                     if (!b3) {
-                        hit(20)
-                        hit(20)
+                        hithit(20)
                     }
                 }
             }
-            hit(30)
-            hit(30)
+            hithit(30)
         } while (!isWood(x, y))
     }
 
-    fun isBranch(level: Int): Boolean {
-        return isWood(x(), y - 310 - 100 * level)
-    }
 
     fun isWaitBranch(level: Int): Boolean {
         var count = 0
-        while (count < 30 && !isWood(x(), y - 310 - 100 * level) && !isWood(x(false), y - 310 - 100 * level)) {
+        while (count < 30 && !isWood(x(), levelY(level)) && !isWood(x(false), levelY(level))) {
             rob.delay(2)
             count++
         }
         return isBranch(level)
     }
+
+    fun isBranch(level: Int) = isWood(x(), levelY(level))
+
+    fun levelY(level: Int) = y - 310 - 100 * level
 
     fun isWood(x: Int, y: Int): Boolean {
         return abs(rob.getPixelColor(x, y).hue() - 32) < 5
@@ -123,6 +119,11 @@ class Player(val x: Int, val y: Int) {
 
     fun hit(delay: Int) {
         rob.click(delay, x(), y)
+    }
+
+    fun hithit(delay: Int) {
+        hit(delay)
+        hit(delay)
     }
 
     fun center(delay: Int) {
